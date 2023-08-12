@@ -18,21 +18,20 @@ class FileStorage:
         """
         Returns the dictionary __objects
         """
-        return self.__objects
+        return FileStorage.__objects
 
     def new(self, obj):
         """
         Sets in __objects the obj with key <obj class name>.id
         """
-        key = "{}.{}".format(obj.__class__.__name__, obj.id)
-        self.__objects[key] = obj
+        FileStorage.__objects[obj.__class__.__name__ + "." + str(obj.id)] = obj
 
     def save(self):
         """
         Serializes __objects to the JSON file (path: __file_path)
         """
-        obj_dict = {key: obj.to_dict() for key, obj in self.__objects.items()}
-        with open(self.__file_path, 'w') as f:
+        obj_dict = {key: obj.to_dict() for key, obj in FileStorage.__objects.items()}
+        with open(FileStorage.__file_path, 'w') as f:
             json.dump(obj_dict, f)
 
     def reload(self):
@@ -40,11 +39,11 @@ class FileStorage:
         Deserializes the JSON file to __objects
         """
         try:
-            with open(self.__file_path, 'r') as f:
+            with open(FileStorage.__file_path, 'r') as f:
                 obj_dict = json.load(f)
                 for key, value in obj_dict.items():
                     class_name, obj_id = key.split('.')
                     class_ref = eval(class_name)
-                    self.__objects[key] = class_ref(**value)
+                    FileStorage.__objects[key] = class_ref(**value)
         except FileNotFoundError:
             pass

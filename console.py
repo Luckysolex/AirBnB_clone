@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-Holberton AirBnB Console.
+Command line interpreter for AirBnB
 """
 import cmd
 import sys
